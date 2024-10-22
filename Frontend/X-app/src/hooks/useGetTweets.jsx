@@ -14,7 +14,7 @@ const useGetMyTweets = (id) => {
       const res = await axios.get(`${TWEET_API_END_POINT}/alltweets/${id}`, {
         withCredentials: true,
       });
-      console.log(res);
+      // console.log(res);
       dispatch(getAllTweets(res.data.tweets)); //receiving loggedin user id
     } catch (error) {
       console.log(error);
@@ -26,7 +26,7 @@ const useGetMyTweets = (id) => {
       const res = await axios.get(
         `${TWEET_API_END_POINT}/followingtweets/${id}`
       );
-      console.log(res);
+      // console.log(res);
       dispatch(getAllTweets(res.data.tweets));
     } catch (error) {
       console.log(error);

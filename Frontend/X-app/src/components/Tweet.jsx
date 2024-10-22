@@ -38,7 +38,7 @@ function Tweet({ tweet }) {
     try {
       axios.defaults.withCredentials = true;
       const res = await axios.delete(`${TWEET_API_END_POINT}/delete/${id}`);
-      console.log(res);
+      // console.log(res);
       dispatch(getRefresh());
       toast.success(res.data.message);
     } catch (error) {
