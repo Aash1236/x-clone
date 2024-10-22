@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
 import tweetRoute from "./routes/tweetRoute.js";
 import cors from "cors";
+import path from "path";
 
 dotenv.config({
   path: ".env",
@@ -15,7 +16,7 @@ dotenv.config({
 databaseConnection();
 
 const app = express();
-
+const _dirname = path.resolve();
 //adding middleware
 app.use(
   express.urlencoded({
@@ -34,6 +35,11 @@ app.use(cors(corsOption));
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/tweet", tweetRoute);
+
+app.use(express.static(path.join(_dirname, "Frontend/X-app/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(_dirname, "Frontend/X-app", "dist", "index.html"));
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server listen at port ${process.env.PORT}`);
