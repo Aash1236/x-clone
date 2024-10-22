@@ -5,9 +5,29 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
 import { CiBookmark } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { USER_API_END_POINT } from "../utils/constant";
+import toast from "react-hot-toast";
+import { getMyProfile, getOtherUsers, getUser } from "../redux/Userslice";
 
 function LeftSidebar() {
+  const { user } = useSelector((store) => store.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.get(`${USER_API_END_POINT}/logout`);
+      dispatch(getUser(null));
+      dispatch(getOtherUsers(null));
+      dispatch(getMyProfile(null));
+      navigate("/login");
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-[20%]">
       <div>
@@ -42,7 +62,7 @@ function LeftSidebar() {
             <h1 className="ml-3 text-lg font-bold">Notification</h1>
           </div>
           <Link
-            to="/profile"
+            to={`/profile/${user?.id}`}
             className="flex items-center px-4 py-2 my-2 rounded-full hover:bg-gray-100 hover:cursor-pointer "
           >
             <div>
@@ -56,7 +76,10 @@ function LeftSidebar() {
             </div>
             <h1 className="ml-3 text-lg font-bold">Bookmarks</h1>
           </div>
-          <div className="flex items-center px-4 py-2 my-2 rounded-full hover:bg-gray-100 hover:cursor-pointer ">
+          <div
+            onClick={logoutHandler}
+            className="flex items-center px-4 py-2 my-2 rounded-full hover:bg-gray-100 hover:cursor-pointer "
+          >
             <div>
               <CiLogout size={"24px"} />
             </div>
